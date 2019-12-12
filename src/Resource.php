@@ -12,6 +12,9 @@ final class Resource implements ResourceObject, \JsonSerializable
     /** @var Attribute[] */
     private array $attributes;
 
+    /** @var LinksObject|null */
+    private ?LinksObject $links = null;
+
     public function __construct(string $type, string $id)
     {
         $this->identifier = new ResourceIdentifier($type, $id);
@@ -44,14 +47,26 @@ final class Resource implements ResourceObject, \JsonSerializable
         return $this;
     }
 
+    public function links(LinksObject $links): self
+    {
+        $this->links = $links;
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */
     public function jsonSerialize()
     {
-        return array_merge($this->identifier->jsonSerialize(), [
+        $data = array_merge($this->identifier->jsonSerialize(), [
             'attributes' => $this->buildAttributes(),
         ]);
+
+        if ($this->links instanceof LinksObject) {
+            $data['links'] = $this->links;
+        }
+
+        return $data;
     }
 
     protected function buildAttributes(): array
