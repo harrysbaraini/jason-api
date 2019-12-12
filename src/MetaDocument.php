@@ -2,7 +2,7 @@
 
 namespace Harrysbaraini\JasonApi;
 
-class JasonApi
+class MetaDocument
 {
 
 }
