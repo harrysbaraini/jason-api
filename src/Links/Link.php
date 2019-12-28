@@ -1,6 +1,6 @@
 <?php
 
-namespace Harrysbaraini\JasonApi;
+namespace Harrysbaraini\JasonApi\Links;
 
 use JsonSerializable;
 

@@ -3,7 +3,7 @@
 namespace Harrysbaraini\JasonApi\Tests;
 
 use Harrysbaraini\JasonApi\Attribute;
-use Harrysbaraini\JasonApi\DataDocument;
+use Harrysbaraini\JasonApi\Laravel\DataResponse;
 use Harrysbaraini\JasonApi\Links\Link;
 use Harrysbaraini\JasonApi\Links\LinksObject;
 use Harrysbaraini\JasonApi\Relationships\Relationship;
@@ -13,12 +13,12 @@ use Harrysbaraini\JasonApi\ResourceCollection;
 use Harrysbaraini\JasonApi\ResourceIdentifier;
 use PHPUnit\Framework\TestCase;
 
-class JsonObjectTest extends TestCase
+class LaravelIntegrationTest extends TestCase
 {
     /** @test */
     public function data_collection_is_valid()
     {
-        $doc = new DataDocument(
+        $doc = new DataResponse(
             new ResourceCollection(
                 (new Resource('users', 1))->attributes(new Attribute('name', 'Vanderlei')),
                 (new Resource('users', 2))->attributes(new Attribute('name', 'Johnny'))
@@ -40,13 +40,13 @@ class JsonObjectTest extends TestCase
             ],
         ];
 
-        $this->assertEquals(json_encode($expected), json_encode($doc));
+        $this->assertEquals(json_encode($expected), json_encode($doc->toArray()));
     }
 
     /** @test */
     public function data_object_is_valid()
     {
-        $doc = new DataDocument(
+        $doc = new DataResponse(
             (new Resource('users', 1))
                 ->attributes(
                     new Attribute('name', 'Vanderlei Sbaraini Amancio'),
@@ -94,6 +94,6 @@ class JsonObjectTest extends TestCase
             ],
         ];
 
-        $this->assertEquals(json_encode($expected), json_encode($doc));
+        $this->assertEquals(json_encode($expected), json_encode($doc->toArray()));
     }
 }

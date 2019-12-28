@@ -2,28 +2,28 @@
 
 namespace Harrysbaraini\JasonApi;
 
-use Harrysbaraini\JasonApi\Contracts\ResourceObject as ResourceObjectContract;
+use Harrysbaraini\JasonApi\Contracts\Resource as ResourceObjectContract;
 
-class DataDocument implements \JsonSerializable, ResourceObjectContract
+class DataDocument implements ResourceObjectContract
 {
     /**
-     * @var Resource
+     * @var ResourceObjectContract
      */
-    private Resource $resourceObject;
+    private ResourceObjectContract $resourceObject;
 
     /**
-     * @var MetaDocument|null
+     * @var MetaObject|null
      */
-    private ?MetaDocument $meta;
+    private ?MetaObject $meta;
 
     public function __construct(ResourceObjectContract $resourceObject)
     {
         $this->resourceObject = $resourceObject;
     }
 
-    public function meta(MetaDocument $document)
+    public function meta(MetaObject $meta)
     {
-        $this->meta = $document;
+        $this->meta = $meta;
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Harrysbaraini\JasonApi\Contracts;
 
-interface ResourceObject
+interface Resource extends \JsonSerializable
 {
 
 }

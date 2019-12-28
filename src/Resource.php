@@ -2,9 +2,11 @@
 
 namespace Harrysbaraini\JasonApi;
 
-use Harrysbaraini\JasonApi\Contracts\ResourceObject;
+use Harrysbaraini\JasonApi\Contracts\Resource as ResourceContract;
+use Harrysbaraini\JasonApi\Links\LinksObject;
+use Harrysbaraini\JasonApi\Relationships\RelationshipsObject;
 
-final class Resource implements ResourceObject, \JsonSerializable
+final class Resource implements ResourceContract
 {
     /** @var ResourceIdentifier */
     private ResourceIdentifier $identifier;
@@ -15,17 +17,26 @@ final class Resource implements ResourceObject, \JsonSerializable
     /** @var LinksObject|null */
     private ?LinksObject $links = null;
 
+    /** @var RelationshipsObject|null */
+    private ?RelationshipsObject $relationships = null;
+
+    /**
+     * Resource constructor.
+     *
+     * @param string $type
+     * @param string $id
+     */
     public function __construct(string $type, string $id)
     {
         $this->identifier = new ResourceIdentifier($type, $id);
     }
 
-    public function attribute(Attribute $attribute): self
-    {
-        $this->attributes[] = $attribute;
-        return $this;
-    }
-
+    /**
+     * Add one or more attributes to the resource.
+     *
+     * @param Attribute[] $attributes
+     * @return $this
+     */
     public function attributes(Attribute ...$attributes): self
     {
         foreach ($attributes as $attr) {
@@ -35,21 +46,21 @@ final class Resource implements ResourceObject, \JsonSerializable
         return $this;
     }
 
-    public function replaceAttributes(Attribute ...$attributes): self
-    {
-        $this->attributes = $attributes;
-        return $this;
-    }
-
-    public function flushAttributes(): self
-    {
-        $this->attributes = [];
-        return $this;
-    }
-
+    /**
+     * Set the links object.
+     *
+     * @param LinksObject $links
+     * @return $this
+     */
     public function links(LinksObject $links): self
     {
         $this->links = $links;
+        return $this;
+    }
+
+    public function relationships($relationships): self
+    {
+        $this->relationships = $relationships;
         return $this;
     }
 
@@ -62,13 +73,22 @@ final class Resource implements ResourceObject, \JsonSerializable
             'attributes' => $this->buildAttributes(),
         ]);
 
-        if ($this->links instanceof LinksObject) {
+        if (isset($this->links)) {
             $data['links'] = $this->links;
+        }
+
+        if (isset($this->relationships)) {
+            $data['relationships'] = $this->relationships;
         }
 
         return $data;
     }
 
+    /**
+     * Build a relational array from the resource attributes.
+     *
+     * @return array
+     */
     protected function buildAttributes(): array
     {
         $attributes = [];

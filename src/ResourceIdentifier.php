@@ -2,7 +2,9 @@
 
 namespace Harrysbaraini\JasonApi;
 
-class ResourceIdentifier implements \JsonSerializable
+use Harrysbaraini\JasonApi\Contracts\Resource;
+
+class ResourceIdentifier implements Resource
 {
     /**
      * @var string
